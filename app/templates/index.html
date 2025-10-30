@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnappFood Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>SnappFood Persian Sentiment Analysis</h1>
+        <p>Enter a review in Persian to find out if its sentiment is Happy or Sad.</p>
+        
+        <form method="POST" action="/">
+            <textarea name="comment" placeholder="...غذای خوبی بود، ممنون" required rows="4"></textarea>
+            <button type="submit">Analyze Sentiment</button>
+        </form>
+
+        {% if result %}
+        <div class="result-box">
+            <h2>Analysis Result</h2>
+            <p class="original-text"><strong>Original Comment:</strong> {{ result.text }}</p>
+            <p class="sentiment-{{ result.sentiment.lower() }}">
+                <strong>Predicted Sentiment:</strong> {{ result.sentiment }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
