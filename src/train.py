@@ -7,6 +7,7 @@ from torch.optim import AdamW
 from tqdm import tqdm
 import os
 
+tqdm.pandas(desc="Preprocessing Comments")
 from data_preprocessing import load_config, load_and_clean_data, text_preprocessor
 
 def train_model():
@@ -14,10 +15,12 @@ def train_model():
     config = load_config()
     df = load_and_clean_data(config)
 
-    df['comment'] = df['comment'].apply(text_preprocessor)
+    print("applying, preprocessings...")
+    df['comment'] = df['comment'].progress_apply(text_preprocessor)
 
     X = df['comment']
     y = df['label_id']
+    print("spliting the dataset..")
     X_train, X_temp, y_train, y_temp = train_test_split(
         X, y, test_size=(config['train']['test_size'] + config['train']['val_size']), random_state=42, stratify=y
     )
@@ -25,21 +28,23 @@ def train_model():
     X_val, X_test, y_val, y_test = train_test_split(
         X_temp, y_temp, test_size=(1-val_size_adjusted), random_state=42, stratify=y_temp
     )
-
+    print("  dataset Splitted successfully")
+    print("Loading Tokernizer...")
     tokenizer = AutoTokenizer.from_pretrained(config['model']['base_name'])
 
     def tokenize_data(texts, max_len):
         return tokenizer(texts.tolist(), padding="max_length", truncation=True, max_length=max_len, return_tensors="pt")
-    
+    print("tokenizing dataset...")
     train_encodings = tokenize_data(X_train, config['train']['max_length'])
     val_encodings = tokenize_data(X_val, config['train']['max_length'])
+    print("Tokenization complete.")
 
     train_dataset = TensorDataset(train_encodings['input_ids'], train_encodings['attention_mask'], torch.tensor(y_train.values))
     val_dataset = TensorDataset(val_encodings['input_ids'], val_encodings['attention_mask'], torch.tensor(y_val.values))
-
+    print("Loading DataLoaders...")
     train_loader = DataLoader(train_dataset, batch_size=config['train']['batch_size'], shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=config['train']['batch_size'])
-
+    print("  DataLoaders Loaded successfully")
     model = AutoModelForSequenceClassification.from_pretrained(config['model']['base_name'], num_labels=2)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
