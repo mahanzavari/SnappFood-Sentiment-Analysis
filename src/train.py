@@ -2,11 +2,12 @@ import pandas as pd
 import torch 
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, AdamW
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from torch.optim import AdamW
 from tqdm import tqdm
 import os
 
-from data_processing import load_config, load_and_clean_data, text_preprocessor
+from data_preprocessing import load_config, load_and_clean_data, text_preprocessor
 
 def train_model():
     """Main function to orchestrate the model training process"""
