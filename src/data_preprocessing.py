@@ -5,6 +5,7 @@ from hazm import Normalizer, WordTokenizer
 import warnings 
 
 # warnings.filterwarnings("ignore")
+normalizer = Normalizer()
 
 def load_config(config_path ='config/params.yml'):
     """Loads the parameters from the configuratiom file"""
@@ -13,7 +14,7 @@ def load_config(config_path ='config/params.yml'):
     
 def load_and_clean_data(config):
     """Loads raw data and applies all cleaning steps from the notebook."""
-    df = pd.read_csv(config["data"]["raw_path"], on_bad_lines='skip', delimiter='\t')
+    df = pd.read_csv(config["data"]["raw_path"], on_bad_lines='skip', delimiter=',')
 
     if 'Unnamed: 0' in df.columns:
         df.drop('Unnamed: 0', axis=1, inplace=True)
@@ -41,7 +42,7 @@ def text_preprocessor(text):
     Simple preprocessor for BERT.
     Just normalizes and cleans unwanted characters. No stopword removal or stemming.
     """
-    normalizer = Normalizer()
+    # normalizer = Normalizer() # Huge bottleneck
     text = normalizer.normalize(text)
     # Remove anything that's not Persian characters, numbers, or whitespace
     text = re.sub(r'[^\w\s\u0600-\u06FF]', '', text)
