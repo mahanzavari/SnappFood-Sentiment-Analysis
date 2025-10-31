@@ -1,30 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SnappFood Sentiment Analysis</title>
+    <title>تحلیل احساسات اسنپ‌فود</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <div class="background-decoration"></div>
+    
     <div class="container">
-        <h1>SnappFood Persian Sentiment Analysis</h1>
-        <p>Enter a review in Persian to find out if its sentiment is Happy or Sad.</p>
-        
-        <form method="POST" action="/">
-            <textarea name="comment" placeholder="...غذای خوبی بود، ممنون" required rows="4"></textarea>
-            <button type="submit">Analyze Sentiment</button>
+        <div class="logo-section">
+            <div class="logo-circle">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <path d="M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 15C33.9 15 37 18.1 37 22C37 25.9 33.9 29 30 29C26.1 29 23 25.9 23 22C23 18.1 26.1 15 30 15ZM30 47C24 47 18.7 43.9 15.8 39.2C16.5 34.3 26 31.5 30 31.5C34 31.5 43.5 34.3 44.2 39.2C41.3 43.9 36 47 30 47Z" fill="#FF00A6"/>
+                </svg>
+            </div>
+            <h1>تحلیل احساسات اسنپ‌فود</h1>
+            <p class="subtitle">نظر خود را وارد کنید تا احساس آن را تشخیص دهیم</p>
+        </div>
+
+        <form method="POST" action="/" class="analysis-form">
+            <div class="input-group">
+                <label for="comment">نظر شما:</label>
+                <textarea 
+                    id="comment"
+                    name="comment" 
+                    placeholder="مثال: غذای خوبی بود، ممنون از خدمات عالی شما..." 
+                    required 
+                    rows="5"></textarea>
+                <div class="input-decoration"></div>
+            </div>
+            <button type="submit" class="analyze-btn">
+                <span class="btn-text">تحلیل احساسات</span>
+                <span class="btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 3L8.59 4.41L13.17 9H3V11H13.17L8.59 15.59L10 17L17 10L10 3Z" fill="white"/>
+                    </svg>
+                </span>
+            </button>
         </form>
 
         {% if result %}
-        <div class="result-box">
-            <h2>Analysis Result</h2>
-            <p class="original-text"><strong>Original Comment:</strong> {{ result.text }}</p>
-            <p class="sentiment-{{ result.sentiment.lower() }}">
-                <strong>Predicted Sentiment:</strong> {{ result.sentiment }}
-            </p>
+        <div class="result-container">
+            <div class="result-header">
+                <div class="result-icon">
+                    {% if result.sentiment.lower() == 'happy' %}
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="22" fill="#00C853" opacity="0.2"/>
+                        <path d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 40C15.18 40 8 32.82 8 24C8 15.18 15.18 8 24 8C32.82 8 40 15.18 40 24C40 32.82 32.82 40 24 40ZM31 22C32.1 22 33 21.1 33 20C33 18.9 32.1 18 31 18C29.9 18 29 18.9 29 20C29 21.1 29.9 22 31 22ZM17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18C15.9 18 15 18.9 15 20C15 21.1 15.9 22 17 22ZM24 34C27.98 34 31.36 31.58 32.78 28H15.22C16.64 31.58 20.02 34 24 34Z" fill="#00C853"/>
+                    </svg>
+                    {% else %}
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="22" fill="#FF1744" opacity="0.2"/>
+                        <path d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 40C15.18 40 8 32.82 8 24C8 15.18 15.18 8 24 8C32.82 8 40 15.18 40 24C40 32.82 32.82 40 24 40ZM31 22C32.1 22 33 21.1 33 20C33 18.9 32.1 18 31 18C29.9 18 29 18.9 29 20C29 21.1 29.9 22 31 22ZM17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18C15.9 18 15 18.9 15 20C15 21.1 15.9 22 17 22ZM24 30C20.02 30 16.64 32.42 15.22 36H32.78C31.36 32.42 27.98 30 24 30Z" fill="#FF1744"/>
+                    </svg>
+                    {% endif %}
+                </div>
+                <h2>نتیجه تحلیل</h2>
+            </div>
+            
+            <div class="result-content">
+                <div class="comment-display">
+                    <span class="label">نظر شما:</span>
+                    <p class="comment-text">{{ result.text }}</p>
+                </div>
+                
+                <div class="sentiment-display sentiment-{{ result.sentiment.lower() }}">
+                    <span class="label">احساس شناسایی شده:</span>
+                    <div class="sentiment-badge">
+                        {% if result.sentiment.lower() == 'happy' %}
+                        <span class="sentiment-emoji">😊</span>
+                        <span class="sentiment-text">مثبت</span>
+                        {% else %}
+                        <span class="sentiment-emoji">😔</span>
+                        <span class="sentiment-text">منفی</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
         {% endif %}
     </div>
+    
+    <footer class="footer">
+        <p>ساخته شده با ❤️ برای بهبود تجربه کاربری</p>
+    </footer>
 </body>
+
 </html>

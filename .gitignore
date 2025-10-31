@@ -8,8 +8,8 @@ venv/
 env/
 
 # DVC - DVC manages these, not Git
-/data/raw/
-/models/
+# /data/raw/
+# /models/
 
 # Other
 .idea/
