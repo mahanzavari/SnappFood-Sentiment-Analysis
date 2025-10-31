@@ -66,30 +66,17 @@ body {
     margin-bottom: 45px;
 }
 
-.logo-circle {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(135deg, #FF00A6 0%, #FF3399 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 25px;
-    box-shadow: 0 8px 24px rgba(255, 0, 166, 0.25);
-    animation: pulse 2s ease-in-out infinite;
+.logo-img {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 20px;
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(255, 0, 166, 0.15));
+    transition: transform 0.3s ease;
 }
 
-@keyframes pulse {
-    0%, 100% {
-        box-shadow: 0 8px 24px rgba(255, 0, 166, 0.25);
-    }
-    50% {
-        box-shadow: 0 8px 32px rgba(255, 0, 166, 0.4);
-    }
-}
-
-.logo-circle svg path {
-    fill: white;
+.logo-img:hover {
+    transform: scale(1.05);
 }
 
 h1 {
