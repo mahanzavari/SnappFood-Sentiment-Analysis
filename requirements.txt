@@ -1,8 +1,12 @@
-torch --index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
 hazm
 transformers
 pandas
 scikit-learn
 gunicorn
-pyYAML
+pyyaml
 tqdm
+flask
+optuna
+matplotlib
