@@ -1,0 +1,31 @@
+# Prometheus & Grafana Helm Values
+# helm install prometheus prometheus-community/kube-prometheus-stack -f k8s/prometheus-grafana-values.yaml
+
+prometheus:
+
+  prometheusSpec:
+    retention: 7d
+    storageSpec:
+
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+
+grafana:
+  adminPassword: "admin"
+  
+  persistence:
+    enabled: true
+    size: 1Gi
+  
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-kube-prometheus-prometheus:9090
+        isDefault: true
