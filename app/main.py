@@ -1,12 +1,24 @@
 from flask import Flask, request, render_template, jsonify
 import sys
 import os
+from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter
 
 # Add src directory to Python path to import our modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.predict import SentimentPredictor
 
 app = Flask(__name__)
+
+# Setup Prometheus metrics - automatically creates /metrics endpoint
+metrics = PrometheusMetrics(app)
+
+# Custom metric to count sentiment predictions by type
+sentiment_counter = Counter(
+    'sentiment_predictions_total',
+    'Total number of sentiment predictions',
+    ['sentiment']
+)
 
 try:
     predictor = SentimentPredictor(config_path="configs/params.yml")
@@ -40,7 +52,18 @@ def api_predict():
     
     comment_text = data['text']
     prediction = predictor.predict(comment_text)
+    
+    # Record sentiment prediction metric
+    sentiment_counter.labels(sentiment=prediction['sentiment']).inc()
+    
     return jsonify(prediction)
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint for Kubernetes."""
+    if predictor is None:
+        return jsonify({"status": "unhealthy", "reason": "Model not loaded"}), 503
+    return jsonify({"status": "healthy"}), 200
 
 if __name__ == '__main__':
     app.run(host = 'localhost', port = 5000, debug=True) 

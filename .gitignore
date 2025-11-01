@@ -9,7 +9,7 @@ env/
 
 # DVC - DVC manages these, not Git
 # /data/raw/
-# /models/
+/models/
 
 # Other
 .idea/
