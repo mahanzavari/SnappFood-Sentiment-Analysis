@@ -1,0 +1,50 @@
+# config/params.yml
+
+data:
+  raw_path: "data/raw/Snappfood.csv"
+
+preprocess:
+  max_words_quantile: 0.95
+
+model:
+  base_name: "HooshvareLab/bert-fa-base-uncased"
+  save_path: "models/parsbert-sentiment-v1"
+
+train:
+  test_size: 0.15
+  max_length: 64
+  epochs: 4
+
+# Hyperparameter Optimization (HPO) Configuration
+hpo:
+  enabled: false
+
+  n_trials: 20
+  
+  parameters:
+    - name: "learning_rate"
+      type: "float"
+      params:
+        low: 1.0e-5
+        high: 5.0e-5
+        log: true
+
+    - name: "weight_decay"
+      type: "float"
+      params:
+        low: 0.0
+        high: 0.2
+
+    - name: "batch_size"
+      type: "categorical"
+      params:
+        choices: [16, 32]
+
+# Fixed Hyperparameters for Direct Training
+# Use this section when hpo.enabled is 'false'.
+# Populate this with the best results from your last Optuna run.
+
+fixed_hyperparameters:
+  learning_rate: 2.15e-5
+  weight_decay: 0.01
+  batch_size: 32
