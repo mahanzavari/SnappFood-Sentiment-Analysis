@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: sentiment-api
-        image: yourusername/snappfood-sentiment-api:latest
+        image: snappfood-sentiment-api:v1.0
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
           name: http

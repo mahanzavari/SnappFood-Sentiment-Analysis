@@ -12,9 +12,9 @@ spec:
   type: NodePort # ClusterIP could be used as well 
   selector: 
     app: sentiment-api
-ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 8000
-    nodePort: 30080
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+      nodePort: 30080
