@@ -1,0 +1,40 @@
+data:
+  raw_path: "data/raw/Snappfood.csv"
+
+preprocess:
+  max_words_quantile: 0.95
+
+model:
+  base_name: "HooshvareLab/bert-fa-base-uncased"
+  save_path: "models/sentiment_model"
+
+train:
+  epochs: 3
+  max_length: 64
+  test_size: 0.2
+  batch_size: 16
+
+hpo:
+  enabled: true
+  n_trials: 10
+  parameters:
+    - name: "learning_rate"
+      type: "float"
+      params:
+        low: 1e-5
+        high: 5e-4
+        log: true
+    - name: "weight_decay"
+      type: "float"
+      params:
+        low: 0.0
+        high: 0.1
+    - name: "batch_size"
+      type: "categorical"
+      params:
+        choices: [8, 16, 32]
+
+fixed_hyperparameters:
+  learning_rate: 2e-5
+  weight_decay: 0.01
+  batch_size: 16
